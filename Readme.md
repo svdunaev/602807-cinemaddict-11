@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Stanislav Dunaev](https://up.htmlacademy.ru/ecmascript/11/user/602807).
-* Наставник: `Неизвестно`.
+* Наставник: [Ilya Berdyugin](https://htmlacademy.ru/profile/id386161).
 
 ---
 
