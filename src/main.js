@@ -309,11 +309,20 @@ const createMovieStatisticsTemplate = () => {
   );
 };
 
-const createFilmContainer = () => {
+const createFilmContainerTemplate = () => {
   return (
     `<section class="films"></section>`
   )
-}
+};
+
+const createFilmsListTemplate = () => {
+  return (
+    `<section class="films-list">
+      <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
+      <div class="films-list__container"></div>
+    </section>`
+  );
+};
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -327,16 +336,23 @@ const siteMainElement = document.querySelector(`.main`);
 
 render(siteMainElement, createMenuTemplate(), `beforeend`);
 
-render(siteMainElement, createFilmContainer(), `beforeend`);
+render(siteMainElement, createFilmContainerTemplate(), `beforeend`);
 
 const filmContainer = document.querySelector(`.films`);
 
+render(filmContainer, createFilmsListTemplate(), `beforeend`);
+
+const filmsList = filmContainer.querySelector(`.films-list`);
+const filmItemContainer = filmsList.querySelector(`.films-list__container`);
+
 for (let i = 0; i < FILMS_COUNT; i++) {
-  render(filmContainer, createMovieTemplate(), `beforeend`);
+  render(filmItemContainer, createMovieTemplate(), `beforeend`);
 }
 
-render(siteMainElement, createTopRatedTemplate(), `beforeend`);
-render(siteMainElement, createMostCommentedTemplate(), `beforeend`);
+render(filmsList, createShowMoreButtonTemplate(), `beforeend`);
+
+render(filmContainer, createTopRatedTemplate(), `beforeend`);
+render(filmContainer, createMostCommentedTemplate(), `beforeend`);
 
 const extraFilms = document.querySelector(`.films-list--extra`);
 const extraFilmsContainer = extraFilms.querySelector(`.films-list__container`);
