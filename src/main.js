@@ -81,8 +81,8 @@ const createMostCommentedTemplate = () => {
 
     </div>
   </section>`
-  )
-}
+  );
+};
 
 const createPopupTemplate = () => {
   return (
@@ -312,7 +312,7 @@ const createMovieStatisticsTemplate = () => {
 const createFilmContainerTemplate = () => {
   return (
     `<section class="films"></section>`
-  )
+  );
 };
 
 const createFilmsListTemplate = () => {
@@ -359,4 +359,4 @@ const extraFilmsContainer = extraFilms.querySelector(`.films-list__container`);
 
 for (let i = 0; i < EXTRA_FILMS; i++) {
   render(extraFilmsContainer, createMovieTemplate(), `beforeend`);
-};
+}
