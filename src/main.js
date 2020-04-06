@@ -62,9 +62,9 @@ const createShowMoreButtonTemplate = () => {
 
 const generateMovieTemplate = (amount) => {
   let template = ``;
-  for (let i = 0; i < amount; i++){
+  for (let i = 0; i < amount; i++) {
     template = template + createMovieTemplate();
-  };
+  }
   return template;
 };
 
@@ -360,4 +360,4 @@ for (let i = 0; i < FILMS_COUNT; i++) {
 render(filmsList, createShowMoreButtonTemplate(), `beforeend`);
 
 render(filmContainer, createTopRatedTemplate(), `beforeend`);
-render(filmContainer, createMostCommentedTemplate(), `beforeend`)
+render(filmContainer, createMostCommentedTemplate(), `beforeend`);
