@@ -60,13 +60,21 @@ const createShowMoreButtonTemplate = () => {
   );
 };
 
+const generateMovieTemplate = (amount) => {
+  let template = ``;
+  for (let i = 0; i < amount; i++){
+    template = template + createMovieTemplate();
+  };
+  return template;
+};
+
 const createTopRatedTemplate = () => {
   return (
     `<section class="films-list--extra">
     <h2 class="films-list__title">Top rated</h2>
 
     <div class="films-list__container">
-
+      ${generateMovieTemplate(EXTRA_FILMS)}
     </div>
   </section>`
   );
@@ -78,7 +86,7 @@ const createMostCommentedTemplate = () => {
     <h2 class="films-list__title">Most commented</h2>
 
     <div class="films-list__container">
-
+      ${generateMovieTemplate(EXTRA_FILMS)}
     </div>
   </section>`
   );
@@ -352,11 +360,4 @@ for (let i = 0; i < FILMS_COUNT; i++) {
 render(filmsList, createShowMoreButtonTemplate(), `beforeend`);
 
 render(filmContainer, createTopRatedTemplate(), `beforeend`);
-render(filmContainer, createMostCommentedTemplate(), `beforeend`);
-
-const extraFilms = document.querySelector(`.films-list--extra`);
-const extraFilmsContainer = extraFilms.querySelector(`.films-list__container`);
-
-for (let i = 0; i < EXTRA_FILMS; i++) {
-  render(extraFilmsContainer, createMovieTemplate(), `beforeend`);
-}
+render(filmContainer, createMostCommentedTemplate(), `beforeend`)
