@@ -1,6 +1,4 @@
 export const createMovieTemplate = (movie) => {
-  const MAX_DESCRIPTION_LENGTH = 140;
-
   const {
     filminfo,
     comments,
