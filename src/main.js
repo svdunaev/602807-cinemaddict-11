@@ -10,6 +10,7 @@ import {createTopRatedTemplate} from "./components/topratedsection.js";
 import {createMostCommentedTemplate} from "./components/mostcommentedsection.js";
 import {generateFilters} from "./mock/filter.js";
 import {generateMovies} from "./mock/movie.js";
+import {createFilmDetails} from "./components/filmdetails.js";
 
 const FILMS_COUNT = 23;
 const FILMS_SHOWING_ON_START = 5;
@@ -60,6 +61,30 @@ loadMoreButton.addEventListener(`click`, () => {
   }
 });
 
+const sitePopupElement = document.querySelector(`.film-details`);
+const closePopupButton = document.querySelector(`.film-details__close-btn`);
+const siteFooterElement = document.querySelector(`.footer`);
+const filmCard = document.querySelectorAll(`.film-card__poster`);
+
+const openFilmDetails = () => {
+  render(siteFooterElement, createFilmDetails(movie), `afterend`);
+};
+
+// filmCard.forEach(addEventListener(`click`, () => {
+//   openFilmDetails();
+// }));
+
 
 render(filmContainer, createTopRatedTemplate(), `beforeend`);
+
+
 render(filmContainer, createMostCommentedTemplate(), `beforeend`);
+
+
+document.addEventListener(`click`, function (event) {
+  if (
+    event.target.className === `.film-details__close-btn`
+  ) {
+    console.log(`click`);
+  }
+});
