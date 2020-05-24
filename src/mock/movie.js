@@ -95,13 +95,13 @@ const getRandomDateOfWatching = () => {
   return targetDate;
 };
 
-const runtime = getRandomIntegerNumber(40, 195);
-
 const formatRuntime = (minutes) => {
-  return `${Math.floor(minutes / 60)}h ${minutes % 60}`;
+  return `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
 };
 
 const generateMovie = () => {
+  const runtime = getRandomIntegerNumber(40, 195);
+
   return {
     comments: generateCommentsArray(getRandomIntegerNumber(0, 5)),
     filminfo: {

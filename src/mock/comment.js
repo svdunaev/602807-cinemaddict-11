@@ -2,9 +2,6 @@ import {loremIpsum} from "../const.js";
 import {getRandomIntegerNumber, getRandomArrayItem, genertaeRandomArray} from "../utils.js";
 
 const userNames = [
-  `Paul Atreides`,
-  `Gurney Halleck`,
-  `Vladimir Harkonnen`,
   `Samuel Pickwick`,
   `Sam Weller`,
   `Nathaniel Winkle`,
@@ -15,10 +12,10 @@ const userNames = [
 ];
 
 const emotionOptions = [
-  `../public/images/angry.png`,
-  `../public/images/puke.png`,
-  `../public/images/sleeping.png`,
-  `../public/images/smile.png`,
+  `./images/emoji/angry.png`,
+  `./images/emoji/puke.png`,
+  `./images/emoji/sleeping.png`,
+  `./images/emoji/smile.png`,
 ];
 
 const getRandomCommentDate = () => {
@@ -31,11 +28,25 @@ const getRandomCommentDate = () => {
   return targetDate;
 };
 
+const castTimeFormat = (value) => {
+  return value < 10 ? `0${value}` : String(value);
+};
+
+const formatCommentDate = (date) => {
+  let day = date.getDate();
+  let month = date.getMonth();
+  let year = date.getFullYear();
+  let hours = castTimeFormat(date.getHours() % 12);
+  let minutes = castTimeFormat(date.getMinutes());
+
+  return `${year}/${month}/${day} ${hours}:${minutes}`;
+};
+
 const generateComment = () => {
   return ({
     author: getRandomArrayItem(userNames),
     comment: genertaeRandomArray(loremIpsum),
-    date: getRandomCommentDate(),
+    commentdate: formatCommentDate(getRandomCommentDate()),
     emotion: getRandomArrayItem(emotionOptions),
   });
 };

@@ -2,7 +2,8 @@ export const createMovieTemplate = (movie) => {
   const {
     filminfo,
     comments,
-    userDetails
+    userDetails,
+    description
   } = movie;
 
   const {title, totalRating, runtime, genre, release, poster} = filminfo;
@@ -13,6 +14,7 @@ export const createMovieTemplate = (movie) => {
 
   const {isWatched, isFavorite, inWatchlist} = userDetails;
 
+  const movieDescription = description.toString();
 
   return (
     `<article class="film-card">
@@ -24,7 +26,7 @@ export const createMovieTemplate = (movie) => {
       <span class="film-card__genre">${genre[0]}</span>
     </p>
     <img src="${poster}" alt="" class="film-card__poster">
-    <p class="film-card__description">opisanie</p>
+    <p class="film-card__description">${movieDescription.length > 140 ? `${movieDescription.substring(0, 139)}…` : movieDescription}</p>
     <a class="film-card__comments">${commentsCount} comments</a>
     <form class="film-card__controls">
       <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${inWatchlist ? `film-card__controls-item--active` : ``}">Add to watchlist</button>
