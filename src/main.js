@@ -28,8 +28,8 @@ render(siteHeaderElement, createSiteHeaderTemplate(), `beforeend`);
 
 const siteMainElement = document.querySelector(`.main`);
 
-const filters = generateFilters();
 const movies = generateMovies(FILMS_COUNT);
+const filters = generateFilters(movies);
 
 render(siteMainElement, createMenuTemplate(filters), `beforeend`);
 

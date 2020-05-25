@@ -14,7 +14,7 @@ export const createMovieTemplate = (movie) => {
 
   const {isWatched, isFavorite, inWatchlist} = userDetails;
 
-  const movieDescription = description.toString();
+  const movieDescription = description.join(` `);
 
   return (
     `<article class="film-card">
