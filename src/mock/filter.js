@@ -1,5 +1,3 @@
-const filterNames = [`Watchlist`, `History`, `Favorites`];
-
 const generateFilters = (movies) => {
   const watchlistCount = movies.filter((movie) => movie.userDetails.inWatchlist);
   const historyCount = movies.filter((movie) => movie.userDetails.isWatched);
