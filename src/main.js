@@ -53,17 +53,24 @@ const filters = generateFilters(movies);
 // render(siteFooterElement, createFilmDetails(movies[0]), `afterend`);
 
 const renderMovie = (movieListContainer, movie) => {
+  const onCardClick = () => {
+    mainFilmsBoard.getElement().appendChild(movieDetailsComponent.getElement());
+  };
+  const onCloseButtonClick = () => {
+    mainFilmsBoard.getElement().removeChild(movieDetailsComponent.getElement());
+  }
+
   const movieComponent = new MovieComponent(movie);
   const moviePoster = movieComponent.getElement().querySelector(`.film-card__poster`);
   const movieTitle = movieComponent.getElement().querySelector(`.film-card__title`);
   const movieCommentsCount = movieComponent.getElement().querySelector(`.film-card__comments`);
-  // moviePoster.addEventListener();
-  // movieTitle.addEventListener();
-  // movieCommentsCount.addEventListener();
+  moviePoster.addEventListener(`click`, onCardClick);
+  movieTitle.addEventListener(`click`, onCardClick);
+  movieCommentsCount.addEventListener(`click`, onCardClick);
 
   const movieDetailsComponent = new FilmDetailsComponent(movie);
   const detailsPopupClose = movieDetailsComponent.getElement().querySelector(`.film-details__close-btn`);
-  // detailsPopupClose.addEventListener();
+  detailsPopupClose.addEventListener(`click`, onCloseButtonClick);
   render(movieListContainer, movieComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
