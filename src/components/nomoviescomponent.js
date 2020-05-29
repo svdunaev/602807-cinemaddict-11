@@ -1,19 +1,18 @@
 import {createElement} from "../utils.js";
 
-const createFooterInfoTemplate = (moviesLength) => {
+const createNoMoviesTemplate = () => {
   return (
-    `<p>${moviesLength} movies inside</p>`
+    `<h2 class="films-list__title">There are no movies in our database</h2>`
   );
 };
 
-export default class FooterInfoComponent {
-  constructor(moviesLength) {
-    this._moviesLength = moviesLength;
+export default class NoMoviesComponent {
+  constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createFooterInfoTemplate(this._moviesLength);
+    return createNoMoviesTemplate();
   }
 
   getElement() {
