@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const createFilterMarkup = (filter, isActive) => {
   const {name, count} = filter;
 
@@ -6,7 +8,7 @@ const createFilterMarkup = (filter, isActive) => {
   );
 };
 
-export const createMenuTemplate = (filters) => {
+const createMenuTemplate = (filters) => {
   const filtersMarkup = filters.map((it, i) => createFilterMarkup(it, i === 0)).join(`\n`);
 
   return (
@@ -25,3 +27,25 @@ export const createMenuTemplate = (filters) => {
   </ul>`
   );
 };
+
+export default class MenuComponnent {
+  constructor(filters) {
+    this._filters = filters;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createMenuTemplate(this._filters);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

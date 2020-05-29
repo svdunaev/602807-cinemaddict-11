@@ -1,4 +1,6 @@
-export const createMovieTemplate = (movie) => {
+import {createElement} from "../utils.js";
+
+const createMovieTemplate = (movie) => {
   const {
     filminfo,
     comments,
@@ -36,3 +38,25 @@ export const createMovieTemplate = (movie) => {
   </article>`
   );
 };
+
+export default class MovieComponent {
+  constructor(movie) {
+    this._movie = movie;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createMovieTemplate(this._movie);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
