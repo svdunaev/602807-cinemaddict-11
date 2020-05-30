@@ -4,7 +4,7 @@ const createFilterMarkup = (filter, isActive) => {
   const {name, count} = filter;
 
   return (
-    `<a href="#${name}" class="main-navigation__item ${isActive ? `main-navigation__item--active` : ``}">${name} <span class="main-navigation__item-count">${count < 5 ? `${count}` : ``}</span></a>`
+    `<a href="#${name}" class="main-navigation__item ${isActive ? `main-navigation__item--active` : ``}">${name} ${count < 5 ? `<span class="main-navigation__item-count">${count}</span>` : ``}</a>`
   );
 };
 
