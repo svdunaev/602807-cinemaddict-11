@@ -74,10 +74,6 @@ const renderMainFilmsBoard = (boardComponent, moviesArr) => {
   const mainMovieListContainer = boardComponent.getElement().querySelector(`.films-list__container`);
 
   const isAllMoviesWatched = moviesArr.every((movie) => movie.isWatched);
-  if (isAllMoviesWatched) {
-    render(boardComponent.getElement(), new NoMoviesComponent().getElement(), RenderPosition.BEFOREEND);
-  }
-
   let showingMovieCount = FILMS_SHOWING_ON_START;
   moviesArr.slice(0, showingMovieCount).forEach((movie) => renderMovie(mainMovieListContainer, movie));
   const loadMoreButton = new ShowMoreButtonComponent();
@@ -91,6 +87,11 @@ const renderMainFilmsBoard = (boardComponent, moviesArr) => {
       loadMoreButton.removeElement();
     }
   });
+  if (isAllMoviesWatched) {
+    render(boardComponent.getElement(), new NoMoviesComponent().getElement(), RenderPosition.BEFOREEND);
+    loadMoreButton.getElement().remove();
+    loadMoreButton.removeElement();
+  }
 };
 
 const renderExtraBoard = (extraBoardComponent, moviesArr) => {
