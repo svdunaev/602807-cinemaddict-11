@@ -93,17 +93,30 @@ const renderMainFilmsBoard = (boardComponent, moviesArr) => {
   });
 };
 
+const renderExtraBoard = (extraBoardComponent, moviesArr) => {
+  const extraMovieContainer = extraBoardComponent.getElement().querySelector(`.films-list__container`);
+
+  let showingMovieCount = EXTRA_FILMS;
+  moviesArr.slice(0, showingMovieCount).forEach((movie) => renderMovie(extraMovieContainer, movie));
+};
+
+
 render(siteHeaderElement, new SiteHeaderComponent().getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new MenuComponnent(filters).getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new FilmsContainerComponent().getElement(), RenderPosition.BEFOREEND);
 
 const siteFilmsSection = siteMainElement.querySelector(`.films`);
 const mainFilmsBoard = new FilmsListComponent();
+const extraTopRatedBoard = new TopRatedComponent();
+const extraMostCommentedBoard = new MostCommentedComponent();
 
 render(siteFilmsSection, mainFilmsBoard.getElement(), RenderPosition.BEFOREEND);
 renderMainFilmsBoard(mainFilmsBoard, movies);
-render(siteFilmsSection, new TopRatedComponent(movies.slice(0, EXTRA_FILMS)).getElement(), RenderPosition.BEFOREEND);
-render(siteFilmsSection, new MostCommentedComponent(movies.slice(0, EXTRA_FILMS)).getElement(), RenderPosition.BEFOREEND);
+render(siteFilmsSection, extraTopRatedBoard.getElement(), RenderPosition.BEFOREEND);
+renderExtraBoard(extraTopRatedBoard, movies);
+render(siteFilmsSection, extraMostCommentedBoard.getElement(), RenderPosition.BEFOREEND);
+renderExtraBoard(extraMostCommentedBoard, movies);
+
 
 const footerInfoSection = siteFooterElement.querySelector(`.footer__statistics`);
 render(footerInfoSection, new FooterInfoComponent(moviesLength).getElement(), RenderPosition.BEFOREEND);
