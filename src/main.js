@@ -1,73 +1,123 @@
-import {createSiteHeaderTemplate} from "./components/siteheader.js";
-import {createMenuTemplate} from "./components/sitemenu.js";
-import {createMovieTemplate} from "./components/movieitem";
-import {createShowMoreButtonTemplate} from "./components/showmorebutton.js";
-import {createPopupTemplate} from "./components/statisticspopup.js";
-import {createUserStatisticsTemplate} from "./components/userstats.js";
-import {createFilmContainerTemplate} from "./components/filmscontainer.js";
-import {createFilmsListTemplate} from "./components/filmslist.js";
-import {createTopRatedTemplate} from "./components/topratedsection.js";
-import {createMostCommentedTemplate} from "./components/mostcommentedsection.js";
+import SiteHeaderComponent from "./components/siteheader.js";
+import MenuComponnent from "./components/sitemenu.js";
+import MovieComponent from "./components/movieitem";
+import ShowMoreButtonComponent from "./components/showmorebutton.js";
+import UserStatsComponent from "./components/userstats.js";
+import FilmsContainerComponent from "./components/filmscontainer.js";
+import FilmsListComponent from "./components/filmslist.js";
+import TopRatedComponent from "./components/topratedsection.js";
+import MostCommentedComponent from "./components/mostcommentedsection.js";
 import {generateFilters} from "./mock/filter.js";
 import {generateMovies} from "./mock/movie.js";
-import {createFilmDetails} from "./components/filmdetails.js";
-import {createFooterInfo} from "./components/footerinfo.js";
+import FilmDetailsComponent from "./components/filmdetails.js";
+import FooterInfoComponent from "./components/footerinfo.js";
+import {render, RenderPosition} from "./utils.js";
+import NoMoviesComponent from "./components/nomoviescomponent.js";
 
 const FILMS_COUNT = 23;
 const FILMS_SHOWING_ON_START = 5;
 const FILMS_SHOWING_ON_BUTTON = 5;
 const EXTRA_FILMS = 2;
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
 const siteHeaderElement = document.querySelector(`.header`);
-
-render(siteHeaderElement, createSiteHeaderTemplate(), `beforeend`);
-
 const siteMainElement = document.querySelector(`.main`);
+const siteFooterElement = document.querySelector(`.footer`);
 
 const movies = generateMovies(FILMS_COUNT);
 const filters = generateFilters(movies);
+const moviesLength = movies.length;
 
-render(siteMainElement, createMenuTemplate(filters), `beforeend`);
+const renderMovie = (movieListContainer, movie) => {
+  const showPopup = () => {
+    mainFilmsBoard.getElement().appendChild(movieDetailsComponent.getElement());
+  };
+  const removePopup = () => {
+    mainFilmsBoard.getElement().removeChild(movieDetailsComponent.getElement());
+  };
 
-render(siteMainElement, createFilmContainerTemplate(), `beforeend`);
+  const onEscKeyDown = (evt) => {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
-const filmContainer = document.querySelector(`.films`);
+    if (isEscKey) {
+      removePopup();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
 
-render(filmContainer, createFilmsListTemplate(), `beforeend`);
+  const movieComponent = new MovieComponent(movie);
+  const moviePoster = movieComponent.getElement().querySelector(`.film-card__poster`);
+  const movieTitle = movieComponent.getElement().querySelector(`.film-card__title`);
+  const movieCommentsCount = movieComponent.getElement().querySelector(`.film-card__comments`);
+  moviePoster.addEventListener(`click`, () => {
+    showPopup();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  });
+  movieTitle.addEventListener(`click`, () => {
+    showPopup();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  });
+  movieCommentsCount.addEventListener(`click`, () => {
+    showPopup();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  });
 
-const filmsList = filmContainer.querySelector(`.films-list`);
-const filmItemContainer = filmsList.querySelector(`.films-list__container`);
+  const movieDetailsComponent = new FilmDetailsComponent(movie);
+  const detailsPopupClose = movieDetailsComponent.getElement().querySelector(`.film-details__close-btn`);
+  detailsPopupClose.addEventListener(`click`, () => {
+    removePopup();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  });
+  render(movieListContainer, movieComponent.getElement(), RenderPosition.BEFOREEND);
+};
 
-let showingMovieCount = FILMS_SHOWING_ON_START;
+const renderMainFilmsBoard = (boardComponent, moviesArr) => {
+  const mainMovieListContainer = boardComponent.getElement().querySelector(`.films-list__container`);
 
-for (let i = 0; i < showingMovieCount; i++) {
-  render(filmItemContainer, createMovieTemplate(movies[i]), `beforeend`);
-}
-
-render(filmsList, createShowMoreButtonTemplate(), `beforeend`);
-
-const loadMoreButton = document.querySelector(`.films-list__show-more`);
-
-loadMoreButton.addEventListener(`click`, () => {
-  const prevMovieCount = showingMovieCount;
-  showingMovieCount = showingMovieCount + FILMS_SHOWING_ON_BUTTON;
-
-  movies.slice(prevMovieCount, showingMovieCount).forEach((movie) => render(filmItemContainer, createMovieTemplate(movie), `beforeend`));
-
-  if (showingMovieCount >= movies.length) {
-    loadMoreButton.remove();
+  const isAllMoviesWatched = moviesArr.every((movie) => movie.isWatched);
+  let showingMovieCount = FILMS_SHOWING_ON_START;
+  moviesArr.slice(0, showingMovieCount).forEach((movie) => renderMovie(mainMovieListContainer, movie));
+  const loadMoreButton = new ShowMoreButtonComponent();
+  render(boardComponent.getElement(), loadMoreButton.getElement(), RenderPosition.BEFOREEND);
+  loadMoreButton.getElement().addEventListener(`click`, () => {
+    const prevMovieCount = showingMovieCount;
+    showingMovieCount = showingMovieCount + FILMS_SHOWING_ON_BUTTON;
+    moviesArr.slice(prevMovieCount, showingMovieCount).forEach((movie) => renderMovie(mainMovieListContainer, movie));
+    if (showingMovieCount >= moviesArr.length) {
+      loadMoreButton.getElement().remove();
+      loadMoreButton.removeElement();
+    }
+  });
+  if (isAllMoviesWatched) {
+    render(boardComponent.getElement(), new NoMoviesComponent().getElement(), RenderPosition.BEFOREEND);
+    loadMoreButton.getElement().remove();
+    loadMoreButton.removeElement();
   }
-});
+};
 
-const siteFooterElement = document.querySelector(`.footer`);
+const renderExtraBoard = (extraBoardComponent, moviesArr) => {
+  const extraMovieContainer = extraBoardComponent.getElement().querySelector(`.films-list__container`);
 
-render(siteFooterElement, createFooterInfo(movies), `beforeend`);
+  let showingMovieCount = EXTRA_FILMS;
+  moviesArr.slice(0, showingMovieCount).forEach((movie) => renderMovie(extraMovieContainer, movie));
+};
 
-render(siteFooterElement, createFilmDetails(movies[0]), `afterend`);
 
-render(filmContainer, createTopRatedTemplate(movies.slice(0, EXTRA_FILMS)), `beforeend`);
-render(filmContainer, createMostCommentedTemplate(movies.slice(0, EXTRA_FILMS)), `beforeend`);
+render(siteHeaderElement, new SiteHeaderComponent().getElement(), RenderPosition.BEFOREEND);
+render(siteMainElement, new MenuComponnent(filters).getElement(), RenderPosition.BEFOREEND);
+render(siteMainElement, new FilmsContainerComponent().getElement(), RenderPosition.BEFOREEND);
+
+const siteFilmsSection = siteMainElement.querySelector(`.films`);
+const mainFilmsBoard = new FilmsListComponent();
+const extraTopRatedBoard = new TopRatedComponent();
+const extraMostCommentedBoard = new MostCommentedComponent();
+
+render(siteFilmsSection, mainFilmsBoard.getElement(), RenderPosition.BEFOREEND);
+renderMainFilmsBoard(mainFilmsBoard, movies);
+render(siteFilmsSection, extraTopRatedBoard.getElement(), RenderPosition.BEFOREEND);
+renderExtraBoard(extraTopRatedBoard, movies);
+render(siteFilmsSection, extraMostCommentedBoard.getElement(), RenderPosition.BEFOREEND);
+renderExtraBoard(extraMostCommentedBoard, movies);
+
+
+const footerInfoSection = siteFooterElement.querySelector(`.footer__statistics`);
+render(footerInfoSection, new FooterInfoComponent(moviesLength).getElement(), RenderPosition.BEFOREEND);

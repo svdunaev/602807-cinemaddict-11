@@ -1,7 +1,7 @@
-import {formatDate} from "../utils.js";
+import {createElement, formatDate} from "../utils.js";
 import {createCommentsSection} from "../components/commentssection.js";
 
-export const createFilmDetails = (movie) => {
+const createFilmDetails = (movie) => {
   const {
     filminfo,
     comments,
@@ -133,3 +133,25 @@ export const createFilmDetails = (movie) => {
   </section>`
   );
 };
+
+export default class FilmDetailsComponent {
+  constructor(movie) {
+    this._movie = movie;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmDetails(this._movie);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

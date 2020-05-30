@@ -1,12 +1,14 @@
+import {createElement} from "../utils.js";
+
 const createFilterMarkup = (filter, isActive) => {
   const {name, count} = filter;
 
   return (
-    `<a href="#${name}" class="main-navigation__item ${isActive ? `main-navigation__item--active` : ``}">${name} <span class="main-navigation__item-count">${count < 5 ? `${count}` : ``}</span></a>`
+    `<a href="#${name}" class="main-navigation__item ${isActive ? `main-navigation__item--active` : ``}">${name} ${count < 5 ? `<span class="main-navigation__item-count">${count}</span>` : ``}</a>`
   );
 };
 
-export const createMenuTemplate = (filters) => {
+const createMenuTemplate = (filters) => {
   const filtersMarkup = filters.map((it, i) => createFilterMarkup(it, i === 0)).join(`\n`);
 
   return (
@@ -25,3 +27,25 @@ export const createMenuTemplate = (filters) => {
   </ul>`
   );
 };
+
+export default class MenuComponnent {
+  constructor(filters) {
+    this._filters = filters;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createMenuTemplate(this._filters);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
