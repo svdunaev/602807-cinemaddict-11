@@ -13,6 +13,7 @@ import FilmDetailsComponent from "./components/filmdetails.js";
 import FooterInfoComponent from "./components/footerinfo.js";
 import {render, remove, RenderPosition} from "./utils/render.js";
 import NoMoviesComponent from "./components/nomoviescomponent.js";
+import PageController from "./controllers/page.js";
 
 const FILMS_COUNT = 23;
 const FILMS_SHOWING_ON_START = 5;
@@ -27,68 +28,68 @@ const movies = generateMovies(FILMS_COUNT);
 const filters = generateFilters(movies);
 const moviesLength = movies.length;
 
-const renderMovie = (movieListContainer, movie) => {
-  const showPopup = () => {
-    mainFilmsBoard.getElement().appendChild(movieDetailsComponent.getElement());
-  };
-  const removePopup = () => {
-    mainFilmsBoard.getElement().removeChild(movieDetailsComponent.getElement());
-  };
+// const renderMovie = (movieListContainer, movie) => {
+//   const showPopup = () => {
+//     mainFilmsBoard.getElement().appendChild(movieDetailsComponent.getElement());
+//   };
+//   const removePopup = () => {
+//     mainFilmsBoard.getElement().removeChild(movieDetailsComponent.getElement());
+//   };
 
-  const onEscKeyDown = (evt) => {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+//   const onEscKeyDown = (evt) => {
+//     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
-    if (isEscKey) {
-      removePopup();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    }
-  };
+//     if (isEscKey) {
+//       removePopup();
+//       document.removeEventListener(`keydown`, onEscKeyDown);
+//     }
+//   };
 
-  const movieComponent = new MovieComponent(movie);
-  movieComponent.setPosterClickHandler(() => {
-    showPopup();
-    document.addEventListener(`keydown`, onEscKeyDown);
-  });
-  movieComponent.setTitleClickHandler(() => {
-    showPopup();
-    document.addEventListener(`keydown`, onEscKeyDown);
-  });
-  movieComponent.setCommentsClickHandler(() => {
-    showPopup();
-    document.addEventListener(`keydown`, onEscKeyDown);
-  });
+//   const movieComponent = new MovieComponent(movie);
+//   movieComponent.setPosterClickHandler(() => {
+//     showPopup();
+//     document.addEventListener(`keydown`, onEscKeyDown);
+//   });
+//   movieComponent.setTitleClickHandler(() => {
+//     showPopup();
+//     document.addEventListener(`keydown`, onEscKeyDown);
+//   });
+//   movieComponent.setCommentsClickHandler(() => {
+//     showPopup();
+//     document.addEventListener(`keydown`, onEscKeyDown);
+//   });
 
-  const movieDetailsComponent = new FilmDetailsComponent(movie);
-  const detailsPopupClose = movieDetailsComponent.getElement().querySelector(`.film-details__close-btn`);
-  detailsPopupClose.addEventListener(`click`, () => {
-    removePopup();
-    document.removeEventListener(`keydown`, onEscKeyDown);
-  });
-  render(movieListContainer, movieComponent, RenderPosition.BEFOREEND);
-};
+//   const movieDetailsComponent = new FilmDetailsComponent(movie);
+//   const detailsPopupClose = movieDetailsComponent.getElement().querySelector(`.film-details__close-btn`);
+//   detailsPopupClose.addEventListener(`click`, () => {
+//     removePopup();
+//     document.removeEventListener(`keydown`, onEscKeyDown);
+//   });
+//   render(movieListContainer, movieComponent, RenderPosition.BEFOREEND);
+// };
 
-const renderMainFilmsBoard = (boardComponent, moviesArr) => {
-  const mainMovieListContainer = boardComponent.getElement().querySelector(`.films-list__container`);
+// const renderMainFilmsBoard = (boardComponent, moviesArr) => {
+//   const mainMovieListContainer = boardComponent.getElement().querySelector(`.films-list__container`);
 
-  const isAllMoviesWatched = moviesArr.every((movie) => movie.isWatched);
-  let showingMovieCount = FILMS_SHOWING_ON_START;
-  moviesArr.slice(0, showingMovieCount).forEach((movie) => renderMovie(mainMovieListContainer, movie));
-  const loadMoreButton = new ShowMoreButtonComponent();
-  render(boardComponent.getElement(), loadMoreButton, RenderPosition.BEFOREEND);
-  loadMoreButton.setClickHandler(() => {
-    const prevMovieCount = showingMovieCount;
-    showingMovieCount = showingMovieCount + FILMS_SHOWING_ON_BUTTON;
-    moviesArr.slice(prevMovieCount, showingMovieCount).forEach((movie) => renderMovie(mainMovieListContainer, movie));
-    if (showingMovieCount >= moviesArr.length) {
-      remove(loadMoreButton);
-    }
-  });
-  if (isAllMoviesWatched) {
-    render(boardComponent.getElement(), new NoMoviesComponent(), RenderPosition.BEFOREEND);
-    remove(loadMoreButton.getElement());
-    remove(loadMoreButton);
-  }
-};
+//   const isAllMoviesWatched = moviesArr.every((movie) => movie.isWatched);
+//   let showingMovieCount = FILMS_SHOWING_ON_START;
+//   moviesArr.slice(0, showingMovieCount).forEach((movie) => renderMovie(mainMovieListContainer, movie));
+//   const loadMoreButton = new ShowMoreButtonComponent();
+//   render(boardComponent.getElement(), loadMoreButton, RenderPosition.BEFOREEND);
+//   loadMoreButton.setClickHandler(() => {
+//     const prevMovieCount = showingMovieCount;
+//     showingMovieCount = showingMovieCount + FILMS_SHOWING_ON_BUTTON;
+//     moviesArr.slice(prevMovieCount, showingMovieCount).forEach((movie) => renderMovie(mainMovieListContainer, movie));
+//     if (showingMovieCount >= moviesArr.length) {
+//       remove(loadMoreButton);
+//     }
+//   });
+//   if (isAllMoviesWatched) {
+//     render(boardComponent.getElement(), new NoMoviesComponent(), RenderPosition.BEFOREEND);
+//     remove(loadMoreButton.getElement());
+//     remove(loadMoreButton);
+//   }
+// };
 
 const renderExtraBoard = (extraBoardComponent, moviesArr) => {
   const extraMovieContainer = extraBoardComponent.getElement().querySelector(`.films-list__container`);
@@ -104,11 +105,13 @@ render(siteMainElement, new FilmsContainerComponent(), RenderPosition.BEFOREEND)
 
 const siteFilmsSection = siteMainElement.querySelector(`.films`);
 const mainFilmsBoard = new FilmsListComponent();
+const pageController = new PageController(mainFilmsBoard);
 const extraTopRatedBoard = new TopRatedComponent();
 const extraMostCommentedBoard = new MostCommentedComponent();
 
 render(siteFilmsSection, mainFilmsBoard, RenderPosition.BEFOREEND);
-renderMainFilmsBoard(mainFilmsBoard, movies);
+// renderMainFilmsBoard(mainFilmsBoard, movies);
+pageController.render(movies)
 render(siteFilmsSection, extraTopRatedBoard, RenderPosition.BEFOREEND);
 renderExtraBoard(extraTopRatedBoard, movies);
 render(siteFilmsSection, extraMostCommentedBoard, RenderPosition.BEFOREEND);
