@@ -45,18 +45,15 @@ const renderMovie = (movieListContainer, movie) => {
   };
 
   const movieComponent = new MovieComponent(movie);
-  const moviePoster = movieComponent.getElement().querySelector(`.film-card__poster`);
-  const movieTitle = movieComponent.getElement().querySelector(`.film-card__title`);
-  const movieCommentsCount = movieComponent.getElement().querySelector(`.film-card__comments`);
-  moviePoster.addEventListener(`click`, () => {
+  movieComponent.setPosterClickHandler(() => {
     showPopup();
     document.addEventListener(`keydown`, onEscKeyDown);
   });
-  movieTitle.addEventListener(`click`, () => {
+  movieComponent.setTitleClickHandler(() => {
     showPopup();
     document.addEventListener(`keydown`, onEscKeyDown);
   });
-  movieCommentsCount.addEventListener(`click`, () => {
+  movieComponent.setCommentsClickHandler(() => {
     showPopup();
     document.addEventListener(`keydown`, onEscKeyDown);
   });
@@ -78,7 +75,7 @@ const renderMainFilmsBoard = (boardComponent, moviesArr) => {
   moviesArr.slice(0, showingMovieCount).forEach((movie) => renderMovie(mainMovieListContainer, movie));
   const loadMoreButton = new ShowMoreButtonComponent();
   render(boardComponent.getElement(), loadMoreButton, RenderPosition.BEFOREEND);
-  loadMoreButton.getElement().addEventListener(`click`, () => {
+  loadMoreButton.setClickHandler(() => {
     const prevMovieCount = showingMovieCount;
     showingMovieCount = showingMovieCount + FILMS_SHOWING_ON_BUTTON;
     moviesArr.slice(prevMovieCount, showingMovieCount).forEach((movie) => renderMovie(mainMovieListContainer, movie));
