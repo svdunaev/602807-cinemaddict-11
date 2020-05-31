@@ -1,4 +1,4 @@
-import {formatDate} from "../utils.js";
+import {formatDate} from "../utils/common.js";
 import AbstractComponent from "../components/AbstractComponent.js";
 import {createCommentsSection} from "../components/commentssection.js";
 

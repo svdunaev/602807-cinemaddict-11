@@ -1,6 +1,6 @@
 import {COUNTRIES} from "../const.js";
 import {loremIpsum} from "../const.js";
-import {getRandomIntegerNumber, getRandomArrayItem, genertaeRandomArray} from "../utils.js";
+import {getRandomIntegerNumber, getRandomArrayItem, genertaeRandomArray} from "../utils/common.js";
 import {generateCommentsArray} from "./comment.js";
 
 const genreOptions = [

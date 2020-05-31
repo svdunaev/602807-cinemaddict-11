@@ -11,7 +11,7 @@ import {generateFilters} from "./mock/filter.js";
 import {generateMovies} from "./mock/movie.js";
 import FilmDetailsComponent from "./components/filmdetails.js";
 import FooterInfoComponent from "./components/footerinfo.js";
-import {render, RenderPosition} from "./utils.js";
+import {render, remove, RenderPosition} from "./utils/render.js";
 import NoMoviesComponent from "./components/nomoviescomponent.js";
 
 const FILMS_COUNT = 23;
@@ -67,7 +67,7 @@ const renderMovie = (movieListContainer, movie) => {
     removePopup();
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
-  render(movieListContainer, movieComponent.getElement(), RenderPosition.BEFOREEND);
+  render(movieListContainer, movieComponent, RenderPosition.BEFOREEND);
 };
 
 const renderMainFilmsBoard = (boardComponent, moviesArr) => {
@@ -77,20 +77,19 @@ const renderMainFilmsBoard = (boardComponent, moviesArr) => {
   let showingMovieCount = FILMS_SHOWING_ON_START;
   moviesArr.slice(0, showingMovieCount).forEach((movie) => renderMovie(mainMovieListContainer, movie));
   const loadMoreButton = new ShowMoreButtonComponent();
-  render(boardComponent.getElement(), loadMoreButton.getElement(), RenderPosition.BEFOREEND);
+  render(boardComponent.getElement(), loadMoreButton, RenderPosition.BEFOREEND);
   loadMoreButton.getElement().addEventListener(`click`, () => {
     const prevMovieCount = showingMovieCount;
     showingMovieCount = showingMovieCount + FILMS_SHOWING_ON_BUTTON;
     moviesArr.slice(prevMovieCount, showingMovieCount).forEach((movie) => renderMovie(mainMovieListContainer, movie));
     if (showingMovieCount >= moviesArr.length) {
-      loadMoreButton.getElement().remove();
-      loadMoreButton.removeElement();
+      remove(loadMoreButton);
     }
   });
   if (isAllMoviesWatched) {
-    render(boardComponent.getElement(), new NoMoviesComponent().getElement(), RenderPosition.BEFOREEND);
-    loadMoreButton.getElement().remove();
-    loadMoreButton.removeElement();
+    render(boardComponent.getElement(), new NoMoviesComponent(), RenderPosition.BEFOREEND);
+    remove(loadMoreButton.getElement());
+    remove(loadMoreButton);
   }
 };
 
@@ -102,22 +101,22 @@ const renderExtraBoard = (extraBoardComponent, moviesArr) => {
 };
 
 
-render(siteHeaderElement, new SiteHeaderComponent().getElement(), RenderPosition.BEFOREEND);
-render(siteMainElement, new MenuComponnent(filters).getElement(), RenderPosition.BEFOREEND);
-render(siteMainElement, new FilmsContainerComponent().getElement(), RenderPosition.BEFOREEND);
+render(siteHeaderElement, new SiteHeaderComponent(), RenderPosition.BEFOREEND);
+render(siteMainElement, new MenuComponnent(filters), RenderPosition.BEFOREEND);
+render(siteMainElement, new FilmsContainerComponent(), RenderPosition.BEFOREEND);
 
 const siteFilmsSection = siteMainElement.querySelector(`.films`);
 const mainFilmsBoard = new FilmsListComponent();
 const extraTopRatedBoard = new TopRatedComponent();
 const extraMostCommentedBoard = new MostCommentedComponent();
 
-render(siteFilmsSection, mainFilmsBoard.getElement(), RenderPosition.BEFOREEND);
+render(siteFilmsSection, mainFilmsBoard, RenderPosition.BEFOREEND);
 renderMainFilmsBoard(mainFilmsBoard, movies);
-render(siteFilmsSection, extraTopRatedBoard.getElement(), RenderPosition.BEFOREEND);
+render(siteFilmsSection, extraTopRatedBoard, RenderPosition.BEFOREEND);
 renderExtraBoard(extraTopRatedBoard, movies);
-render(siteFilmsSection, extraMostCommentedBoard.getElement(), RenderPosition.BEFOREEND);
+render(siteFilmsSection, extraMostCommentedBoard, RenderPosition.BEFOREEND);
 renderExtraBoard(extraMostCommentedBoard, movies);
 
 
 const footerInfoSection = siteFooterElement.querySelector(`.footer__statistics`);
-render(footerInfoSection, new FooterInfoComponent(moviesLength).getElement(), RenderPosition.BEFOREEND);
+render(footerInfoSection, new FooterInfoComponent(moviesLength), RenderPosition.BEFOREEND);

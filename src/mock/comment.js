@@ -1,5 +1,5 @@
 import {loremIpsum} from "../const.js";
-import {getRandomIntegerNumber, getRandomArrayItem, genertaeRandomArray} from "../utils.js";
+import {getRandomIntegerNumber, getRandomArrayItem, genertaeRandomArray} from "../utils/common.js";
 
 const userNames = [
   `Samuel Pickwick`,

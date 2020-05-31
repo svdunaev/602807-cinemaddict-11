@@ -1,4 +1,4 @@
-import AbstractComponent from "../components/AbstractComponent.js";;
+import AbstractComponent from "../components/AbstractComponent.js";
 
 const createFilterMarkup = (filter, isActive) => {
   const {name, count} = filter;
