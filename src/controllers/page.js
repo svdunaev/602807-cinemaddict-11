@@ -13,7 +13,6 @@ const FILMS_SHOWING_ON_START = 5;
 const FILMS_SHOWING_ON_BUTTON = 5;
 
 const renderMovie = (movieListContainer, movie) => {
-  const mainFilmsBoard = document.querySelector(`.films-list__container`);
   const showPopup = () => {
     mainFilmsBoard.getElement().appendChild(movieDetailsComponent.getElement());
   };
@@ -75,7 +74,6 @@ const renderMainFilmsBoard = (boardComponent, moviesArr) => {
     remove(loadMoreButton);
   }
 };
-
 
 export default class PageController {
   constructor(container) {
