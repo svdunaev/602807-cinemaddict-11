@@ -3,21 +3,23 @@ import MenuComponnent from "../components/sitemenu.js";
 import MovieComponent from "../components/movieitem";
 import ShowMoreButtonComponent from "../components/showmorebutton.js";
 import UserStatsComponent from "../components/userstats.js";
-import FilmsContainerComponent from "../components/filmscontainer.js";
 import FilmsListComponent from "../components/filmslist.js";
 import NoMoviesComponent from "../components/nomoviescomponent.js";
 import FilmDetailsComponent from "../components/filmdetails";
+import TopRatedComponent from "../components/topratedsection.js";
+import MostCommentedComponent from "../components/mostcommentedsection.js";
 import {render, remove, RenderPosition} from "../utils/render";
 
 const FILMS_SHOWING_ON_START = 5;
 const FILMS_SHOWING_ON_BUTTON = 5;
+const EXTRA_FILMS = 2;
 
 const renderMovie = (movieListContainer, movie) => {
   const showPopup = () => {
-    mainFilmsBoard.getElement().appendChild(movieDetailsComponent.getElement());
+    sectionComponent.getElement().appendChild(movieDetailsComponent.getElement());
   };
   const removePopup = () => {
-    mainFilmsBoard.getElement().removeChild(movieDetailsComponent.getElement());
+    sectionComponent.getElement().removeChild(movieDetailsComponent.getElement());
   };
 
   const onEscKeyDown = (evt) => {
@@ -52,27 +54,44 @@ const renderMovie = (movieListContainer, movie) => {
   render(movieListContainer, movieComponent, RenderPosition.BEFOREEND);
 };
 
-const renderMainFilmsBoard = (boardComponent, moviesArr) => {
-  const mainMovieListContainer = boardComponent.getElement().querySelector(`.films-list__container`);
+const renderMainFilmsBoard = (sectionComponent, movies) => {
 
-  const isAllMoviesWatched = moviesArr.every((movie) => movie.isWatched);
   let showingMovieCount = FILMS_SHOWING_ON_START;
-  moviesArr.slice(0, showingMovieCount).forEach((movie) => renderMovie(mainMovieListContainer, movie));
+  movies.slice(0, showingMovieCount).forEach((movie) => renderMovie(sectionComponent, movie));
   const loadMoreButton = new ShowMoreButtonComponent();
-  render(boardComponent.getElement(), loadMoreButton, RenderPosition.BEFOREEND);
+  render(sectionComponent.getElement(), loadMoreButton, RenderPosition.BEFOREEND);
   loadMoreButton.setClickHandler(() => {
     const prevMovieCount = showingMovieCount;
     showingMovieCount = showingMovieCount + FILMS_SHOWING_ON_BUTTON;
-    moviesArr.slice(prevMovieCount, showingMovieCount).forEach((movie) => renderMovie(mainMovieListContainer, movie));
-    if (showingMovieCount >= moviesArr.length) {
+    movies.slice(prevMovieCount, showingMovieCount).forEach((movie) => renderMovie(sectionComponent, movie));
+    if (showingMovieCount >= movies.length) {
       remove(loadMoreButton);
     }
   });
-  if (isAllMoviesWatched) {
-    render(boardComponent.getElement(), new NoMoviesComponent(), RenderPosition.BEFOREEND);
-    remove(loadMoreButton.getElement());
-    remove(loadMoreButton);
-  }
+};
+
+const renderExtraBoard = (extraBoardComponent, moviesArr) => {
+  const extraMovieContainer = extraBoardComponent.getElement().querySelector(`.films-list__container`);
+
+  let showingMovieCount = EXTRA_FILMS;
+  moviesArr.slice(0, showingMovieCount).forEach((movie) => renderMovie(extraMovieContainer, movie));
+};
+
+const renderFilmsPage = (boardComponent, movies) => {
+  // const isAllMoviesWatched = movies.every((movie) => movie.isWatched);
+
+  const sectionComponent = new FilmsListComponent();
+  renderMainFilmsBoard(sectionComponent, movies);
+
+  const extraTopRatedComponent = new TopRatedComponent();
+  const extraMostCommentedComponent = new MostCommentedComponent();
+  renderExtraBoard(extraTopRatedComponent, movies);
+  renderExtraBoard(extraMostCommentedComponent, movies);
+  // if (isAllMoviesWatched) {
+  //   render(boardComponent.getElement(), new NoMoviesComponent(), RenderPosition.BEFOREEND);
+  //   remove(loadMoreButton.getElement());
+  //   remove(loadMoreButton);
+  // }
 };
 
 export default class PageController {
@@ -81,6 +100,6 @@ export default class PageController {
   }
 
   render(movies) {
-    renderMainFilmsBoard(this._container, movies);
+    renderFilmsPage(this._container, movies);
   }
 }
