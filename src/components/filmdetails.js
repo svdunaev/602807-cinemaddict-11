@@ -1,4 +1,5 @@
-import {createElement, formatDate} from "../utils.js";
+import {formatDate} from "../utils.js";
+import AbstractComponent from "../components/AbstractComponent.js";
 import {createCommentsSection} from "../components/commentssection.js";
 
 const createFilmDetails = (movie) => {
@@ -134,24 +135,13 @@ const createFilmDetails = (movie) => {
   );
 };
 
-export default class FilmDetailsComponent {
+export default class FilmDetailsComponent extends AbstractComponent {
   constructor(movie) {
+    super();
     this._movie = movie;
-    this._element = null;
   }
 
   getTemplate() {
     return createFilmDetails(this._movie);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

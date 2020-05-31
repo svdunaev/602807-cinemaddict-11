@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "../components/AbstractComponent.js";
 
 const createSiteHeaderTemplate = () => {
   return (
@@ -9,23 +9,8 @@ const createSiteHeaderTemplate = () => {
   );
 };
 
-export default class SiteHeaderComponent {
-  constructor() {
-    this._element = null;
-  }
-
+export default class SiteHeaderComponent extends AbstractComponent {
   getTemplate() {
     return createSiteHeaderTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
